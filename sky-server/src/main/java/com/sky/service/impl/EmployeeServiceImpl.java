@@ -1,5 +1,7 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
@@ -7,7 +9,9 @@ import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
+import com.sky.entity.PageBean;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
@@ -20,9 +24,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -115,13 +121,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        System.out.println("当前线程的ID："+Thread.currentThread().getId());
         employeeMapper.addEmpl(employee);
 
+    }
+
+    @Override
+    public void editStatus(Integer status,Long empId) {
+        Employee employee= Employee.builder()
+                .status(status)
+                .id(empId)
+                .build();
 
 
+        employeeMapper.editStatus(employee);
+    }
 
-
-
-
-
+    @Override
+    public PageBean querySearch(EmployeePageQueryDTO employeePageQueryDTO) {
+        PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
+        List<Employee> empList=employeeMapper.list(employeePageQueryDTO);
+        Page<Employee> p= (Page<Employee>) empList;
+        PageBean pageBean=new PageBean(p.getTotal(), p.getResult());
+        return pageBean;
     }
 
 }

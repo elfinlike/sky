@@ -4,7 +4,9 @@ import com.sky.constant.JwtClaimsConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
+import com.sky.entity.PageBean;
 import com.sky.properties.JwtProperties;
 import com.sky.result.Result;
 import com.sky.service.EmployeeService;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,7 +81,7 @@ public class EmployeeController {
 //不知道为什么，前端并没有将empID传到后端来
     @ApiOperation(value = "修改密码")
     @PutMapping("/editPassword")
-    public Result editPassword(@RequestBody Map<Object,Object> map){
+    public Result<String> editPassword(@RequestBody Map<Object,Object> map){
         Long empId= BaseContext.getCurrentId();
         String newPassword= (String) map.get("newPassword");
         String oldPassword=(String) map.get("oldPassword");
@@ -89,15 +92,26 @@ public class EmployeeController {
 
     @ApiOperation(value = "新增员工")
     @PostMapping
-    public Result addEmpl(@RequestBody EmployeeDTO employeeDTO){
+    public Result<String> addEmpl(@RequestBody EmployeeDTO employeeDTO){
         log.info("新增的员工：{}",employeeDTO);
 //        System.out.println("当前线程的ID："+Thread.currentThread().getId());
         employeeService.addEmpl(employeeDTO);
         return Result.success();
     }
 
+    @ApiOperation(value = "更改状态")
+    @PostMapping("/status/{status}")
+    public Result<String> editStatus(@PathVariable Integer status,Long id){
+        employeeService.editStatus(status,id);
+        return Result.success();
+    }
 
 
-
-
+    @ApiOperation(value = "分页查询")
+    @GetMapping("/page")
+    public Result<PageBean> pageSearch(EmployeePageQueryDTO employeePageQueryDTO){
+        log.info("分页查询，参数："+employeePageQueryDTO);
+        PageBean pageBean =employeeService.querySearch(employeePageQueryDTO);
+        return Result.success(pageBean);
+    }
 }
