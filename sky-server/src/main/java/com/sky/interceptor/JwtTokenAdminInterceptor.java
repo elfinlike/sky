@@ -60,4 +60,14 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         }
 
     }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+//        HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
+//        System.out.println(BaseContext.getCurrentId());
+        //由于tomcat的线程池会出现复用的状况，因此最好确保在获取到当前threadLocal所存储的id之后，就将threadlocal进行一个清空，
+        //以确保在出现线程复用时不会导致出现奇怪的值
+        BaseContext.removeCurrentId();
+//        System.out.println(BaseContext.getCurrentId());
+    }
 }
