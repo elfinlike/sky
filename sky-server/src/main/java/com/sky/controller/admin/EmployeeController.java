@@ -114,4 +114,18 @@ public class EmployeeController {
         PageBean pageBean =employeeService.querySearch(employeePageQueryDTO);
         return Result.success(pageBean);
     }
+
+    @ApiOperation(value = "修改员工信息")
+    @PutMapping
+    public Result<String> UpdateEml(@RequestBody EmployeeDTO employeeDTO){
+        log.info("传回的员工修改数据："+employeeDTO);
+        employeeService.update(employeeDTO);
+        return Result.success();
+    }
+    @GetMapping("/{id}")
+    public Result<Employee> getById(@PathVariable Long id){
+        log.info("获取的id值为："+id);
+        Employee employee=employeeService.getById(id);
+        return Result.success(employee);
+    }
 }

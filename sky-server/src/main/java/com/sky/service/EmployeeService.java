@@ -22,4 +22,8 @@ public interface EmployeeService {
     void editStatus(Integer status,Long empId);
 
     PageBean querySearch(EmployeePageQueryDTO employeePageQueryDTO);
+
+    void update(EmployeeDTO employeeDTO);
+
+    Employee getById(Long id);
 }

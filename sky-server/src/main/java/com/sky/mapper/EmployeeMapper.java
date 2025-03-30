@@ -35,4 +35,7 @@ public interface EmployeeMapper {
     List<Employee> list(EmployeePageQueryDTO employeePageQueryDTO);
 
     void editStatus(Employee employee);
+
+    @Select("select * from employee where id=#{id}")
+    Employee getById(Long id);
 }
