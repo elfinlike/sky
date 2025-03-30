@@ -24,7 +24,7 @@
                 id_number=#{idNumber},
             </if>
             <if test="status!=null">
-                status=#{status}
+                status=#{status},
             </if>
             <if test="createTime!=null">
                 create_time=#{createTime},

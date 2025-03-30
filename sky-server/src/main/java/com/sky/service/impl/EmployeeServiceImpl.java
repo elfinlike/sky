@@ -104,8 +104,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee=new Employee();
         BeanUtils.copyProperties(employeedto,employee);
         //设置账号的状态
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
         employee.setStatus(StatusConstant.ENABLE);
         //将密码进行md5加密
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
@@ -114,9 +114,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        String token = request.getHeader(jwtProperties.getAdminTokenName());
 //        Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
 //        Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
-        Long empId=BaseContext.getCurrentId();
-        employee.setCreateUser(empId);
-        employee.setUpdateUser(empId);
+//        Long empId=BaseContext.getCurrentId();
+//        employee.setCreateUser(empId);
+//        employee.setUpdateUser(empId);
 
 //        System.out.println("当前线程的ID："+Thread.currentThread().getId());
         employeeMapper.addEmpl(employee);
@@ -129,8 +129,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .status(status)
                 .id(empId)
                 .build();
-
-
         employeeMapper.editStatus(employee);
     }
 
@@ -147,8 +145,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void update(EmployeeDTO employeeDTO) {
         Employee employee=new Employee();
         BeanUtils.copyProperties(employeeDTO,employee);
-        employee.setUpdateUser(BaseContext.getCurrentId());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateUser(BaseContext.getCurrentId());
+//        employee.setUpdateTime(LocalDateTime.now());
         employeeMapper.editStatus(employee);
     }
 
