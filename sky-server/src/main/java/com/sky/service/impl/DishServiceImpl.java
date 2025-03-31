@@ -93,7 +93,7 @@ public class DishServiceImpl  implements DishService {
             dishFlavorMapper.insertBatch(flavors);
         }
     }
-
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateWithFlavor(DishDTO dishDTO) {
         //首先先根据id更新dish
