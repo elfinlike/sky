@@ -6,11 +6,13 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.io.ByteArrayInputStream;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
+
 @Slf4j
 public class AliOssUtil {
 
@@ -19,6 +21,16 @@ public class AliOssUtil {
     private String accessKeySecret;
     private String bucketName;
 
+    public AliOssUtil(String endpoint,
+     String accessKeyId,
+     String accessKeySecret,
+     String bucketName){
+        this.accessKeyId=accessKeyId;
+        this.endpoint=endpoint;
+        this.accessKeySecret=accessKeySecret;
+        this.bucketName=bucketName;
+    }
+
     /**
      * 文件上传
      *
@@ -26,7 +38,7 @@ public class AliOssUtil {
      * @param objectName
      * @return
      */
-    public String upload(byte[] bytes, String objectName) {
+    public  String upload(byte[] bytes, String objectName) {
 
         // 创建OSSClient实例。
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
