@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController("userShopController")
 @Slf4j
 @Api(tags = "用户查询店铺状态")
-@RequestMapping(" /user/shop")
+@RequestMapping("/user/shop")
 public class ShopController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class ShopController {
     @GetMapping("/status")
     @ApiOperation(value = "获取营业状态")
     public Result<Integer> getShop(){
-        Integer status=(Integer) redisTemplate.opsForValue().get(key);
+        Integer status=Integer.valueOf((String)redisTemplate.opsForValue().get(key));
         log.info("获取到的店铺的状态为：{}",status==1?"营业中":"打烊中");
         return Result.success(status);
     }
