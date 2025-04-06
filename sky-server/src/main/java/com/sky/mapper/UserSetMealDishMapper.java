@@ -9,6 +9,6 @@ import java.util.List;
 @Mapper
 public interface UserSetMealDishMapper {
 
-    @Select("select * from setmeal_dish where setmeal_id=#{id}")
+    @Select("select * from setmeal_dish where setmeal_id=#{id} ")
     List<SetmealDish> getIdBatch(Long id);
 }

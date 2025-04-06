@@ -8,6 +8,6 @@ import java.util.List;
 
 @Mapper
 public interface UserSetMealMapper {
-    @Select("select * from setmeal where category_id=#{categoryId}")
+    @Select("select * from setmeal where category_id=#{categoryId} and status=1")
     List<Setmeal> getByMeal(Long categoryId);
 }
