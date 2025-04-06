@@ -22,27 +22,22 @@ public class UserDishServiceImpl implements UserDishService {
     @Autowired
     private UserDishFlavorMapper userDishFlavorMapper;
     @Override
-    public List<DishVO> getByCate(Long categoryId) {
-        //先找出cate
-        List<Dish> dishes=userDishMapper.getByCate(categoryId);
-        if(dishes==null){
-            return null;
-        }
-        List<DishVO> dishVOS=new ArrayList<>();
-        if (dishes!=null){
-            for (Dish dish:
-                 dishes) {
-               DishVO dishVO=new DishVO();
-               BeanUtils.copyProperties(dish,dishVO);
-               dishVOS.add(dishVO);
-            }
+    public List<DishVO> getByCate(Dish dish) {
+        List<Dish> dishList = userDishMapper.getByCate(dish);
 
-            for (DishVO dish:
-                 dishVOS) {
-                List<DishFlavor> dishFlavors=userDishFlavorMapper.getByDish(dish);
-                dish.setFlavors(dishFlavors);
-            }
+        List<DishVO> dishVOList = new ArrayList<>();
+
+        for (Dish d : dishList) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d,dishVO);
+
+            //根据菜品id查询对应的口味
+            List<DishFlavor> flavors = userDishFlavorMapper.getByDish(d.getId());
+
+            dishVO.setFlavors(flavors);
+            dishVOList.add(dishVO);
         }
-        return dishVOS;
+
+        return dishVOList;
     }
 }

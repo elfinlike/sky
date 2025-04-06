@@ -9,6 +9,8 @@ import java.util.List;
 @Mapper
 public interface UserDishMapper {
 
-    @Select("select * from dish where category_id=#{categoryId}")
-    List<Dish> getByCate(Long categoryId);
+    @Select("select * from dish where category_id=#{categoryId} and status=#{status}")
+    List<Dish> getByCate(Dish dish);
+
+
 }

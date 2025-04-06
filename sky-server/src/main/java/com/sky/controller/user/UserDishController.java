@@ -1,7 +1,9 @@
 package com.sky.controller.user;
 
 
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
+import com.sky.entity.Dish;
 import com.sky.result.Result;
 import com.sky.service.UserDishService;
 import com.sky.vo.DishVO;
@@ -27,7 +29,10 @@ public class UserDishController {
     @GetMapping("/list")
     public Result<List<DishVO>> dishList(Long categoryId){
         log.info("前端传回的categoryId为："+categoryId);
-        List<DishVO> dishVOS=userDishService.getByCate(categoryId);
+        Dish dish=new Dish();
+        dish.setCategoryId(categoryId);
+        dish.setStatus(StatusConstant.ENABLE);
+        List<DishVO> dishVOS=userDishService.getByCate(dish);
         return Result.success(dishVOS);
     }
 }
