@@ -105,7 +105,7 @@ public class OrderController {
 
 
 
-    o
+
     @GetMapping("/reminder/{id}")
     @ApiOperation(value = "催单")
     public Result<String> reminder(@PathVariable Long id){
