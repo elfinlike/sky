@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@RestController("UserOrderController")
 @Slf4j
 @Api(tags = "用户订单相关接口")
 @RequestMapping("/user/order")
