@@ -166,20 +166,20 @@ public class OrdersPageServiceImpl implements OrdersPageService {
         if(orders==null||!orders.getStatus().equals(Orders.TO_BE_CONFIRMED)){
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
-        if(orders.getPayStatus()==Orders.PAID){
-            //用户已经付款了，需要对支付金额进行退款
-            String refund = null;
-            try {
-                refund = weChatPayUtil.refund(
-                        orders.getNumber(),
-                        orders.getNumber(),
-                        new BigDecimal(0.01),
-                        new BigDecimal(0.01));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            log.info("申请退款：{}", refund);
-        }
+//        if(orders.getPayStatus()==Orders.PAID){
+//            //用户已经付款了，需要对支付金额进行退款
+//            String refund = null;
+//            try {
+//                refund = weChatPayUtil.refund(
+//                        orders.getNumber(),
+//                        orders.getNumber(),
+//                        new BigDecimal(0.01),
+//                        new BigDecimal(0.01));
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//            log.info("申请退款：{}", refund);
+//        }
         Orders orders1=new Orders();
         BeanUtils.copyProperties(ordersRejectionDTO,orders1);
         orders1.setStatus(Orders.CANCELLED);

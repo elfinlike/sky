@@ -15,6 +15,7 @@ import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrdersListVO;
+import com.sky.websocket.WebSocketServer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +38,9 @@ public class OrderController {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
     /**
      *用户下单
      * @param submitDTO
@@ -101,31 +105,23 @@ public class OrderController {
 
 
 
+    o
+    @GetMapping("/reminder/{id}")
+    @ApiOperation(value = "催单")
+    public Result<String> reminder(@PathVariable Long id){
+        Orders orders=orderMapper.getById(id);
+        if (orders==null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        Map map=new HashMap<>();
+        map.put("type",2);
+        map.put("orderId",id);
+        map.put("content","订单号"+orders.getNumber());
 
-
-
-
-//    @GetMapping("/reminder/{id}")
-//    @ApiOperation(value = "催单")
-//    public Result<String> reminder(@PathVariable Long id){
-//        Orders orders=orderMapper.getById(id);
-//        if (orders==null){
-//            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
-//        }
-//        Map map=new HashMap<>();
-//        map.put("type",2);
-//        map.put("orderId",id);
-//        map.put("content","订单号"+orders.getNumber());
-//
-//        String json= JSON.toJSONString(map);
-//        log.info("推送消息为:{}",json);
-//
-//        //推送到所有的管理端
-//        webSocketServer.sendToAllClient(json);
-//    }
-
-
-
-
-
+        String json= JSON.toJSONString(map);
+        log.info("推送消息为:{}",json);
+        //推送到所有的管理端
+        webSocketServer.sendToAllClient(json);
+        return Result.success();
+    }
 }
