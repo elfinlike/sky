@@ -7,15 +7,20 @@ import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
-import com.sky.vo.OrderReportVO;
-import com.sky.vo.SalesTop10ReportVO;
-import com.sky.vo.TurnoverReportVO;
-import com.sky.vo.UserReportVO;
+import com.sky.service.WorkSpaceService;
+import com.sky.vo.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.util.StringUtil;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -34,8 +39,9 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private UserMapper userMapper;
 
+
     @Autowired
-    private OrderDetailMapper orderDetailMapper;
+    private WorkSpaceService workSpaceService;
 
     /**
      * 统计指定时间区间内的营业额数据
@@ -214,5 +220,36 @@ public class ReportServiceImpl implements ReportService {
                 .build();
 
         return salesTop10ReportVO;
+    }
+
+    /**
+     * 导出运营数据报表
+     * @param response
+     */
+    @Override
+    public void exportBusinessData(HttpServletResponse response) throws IOException {
+        //1.查询数据库获取营业数据----前三十天的运营数据
+        BusinessDataVO businessDataVO=workSpaceService.getBusinessData();
+        //2.通过POI将数据写入到Excel文件中
+        InputStream in=this.getClass().getClassLoader().getResourceAsStream("template/运营数据报表模板.xlsx");
+        //基于模板文件创建新的Excel文件
+        XSSFWorkbook excel=new XSSFWorkbook(in);
+        //填充数据
+        XSSFSheet sheet=excel.getSheet("sheet1");
+        sheet.getRow(1).getCell(1).setCellValue("今日以及前三十日流水记录");
+
+        //获得第四行
+        XSSFRow row=sheet.getRow(3);
+        row.getCell(2).setCellValue(businessDataVO.getTurnover());
+        row.getCell(4).setCellValue(businessDataVO.getOrderCompletionRate());
+        row.getCell(6).setCellValue(businessDataVO.getNewUsers());
+        row=sheet.getRow(4);
+        row.getCell(2).setCellValue(businessDataVO.getValidOrderCount());
+        row.getCell(4).setCellValue(businessDataVO.getUnitPrice());
+        //3.通过输出流将Excel文件下载到客户端浏览器
+        ServletOutputStream out=response.getOutputStream();
+        excel.write(out);
+        //关闭资源
+
     }
 }
