@@ -114,7 +114,7 @@ public class OrderController {
             throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
         }
         Map map=new HashMap<>();
-        map.put("type",2);
+        map.put("type",2);//2 代表着用户催单
         map.put("orderId",id);
         map.put("content","订单号"+orders.getNumber());
 

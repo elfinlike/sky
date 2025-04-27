@@ -35,4 +35,7 @@ public interface DishMapper {
     void insert(Dish dish);
 
     void deleteBatch(List<Long> ids);
+
+    @Select("select count(*) from dish where status=#{status}")
+    Integer getByStatus(Integer status);
 }

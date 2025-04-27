@@ -28,4 +28,7 @@ public interface SetmealMapper {
     void updateMeal(Setmeal setmeal);
 
     void deleteBatch(List<Long> ids);
+
+    @Select("select count(*) from setmeal where status=#{status}")
+    Integer getByStatus(Integer status);
 }
